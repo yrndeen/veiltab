@@ -1,0 +1,119 @@
+{
+  "manifest-version": "1",
+  "compiler-version": "0.36.1",
+  "compiler-commit": "7fa3a117c5e7efe9d2c51da04263e5f0b3509144",
+  "language-version": "0.28.0",
+  "runtime-version": "0.21.0",
+  "compiler": {
+    "type": "directory",
+    "contract-info.json": {
+      "type": "file",
+      "size": 5668,
+      "hash": "8f025c6b319cdd941a51861bc9909cedfea675d0a9a637fd7291b1ab5817076c"
+    }
+  },
+  "contract": {
+    "type": "directory",
+    "index.d.ts": {
+      "type": "file",
+      "size": 4292,
+      "hash": "ce017ef849f2f3c62fc298ac9ec72085ce4b34828e2fc677e9bca26b063088d9"
+    },
+    "index.js": {
+      "type": "file",
+      "size": 113390,
+      "hash": "98071485945d07704ee853b541fbd6742ae32e71bc4d767af9449e167bd232fd"
+    },
+    "index.js.map": {
+      "type": "file",
+      "size": 4098,
+      "hash": "ae9ca03a3bb2ddc70bfa8e2f72917439a302d5cbddea7b17111e98fb1a0e48a3"
+    }
+  },
+  "zkir": {
+    "type": "directory",
+    "commitShare.bzkir": {
+      "type": "file",
+      "size": 2302,
+      "hash": "7ed9c3b51e799fdc33373471c99383f468d92a224ce6c2dfed595ff4575ad7c2"
+    },
+    "commitShare.zkir": {
+      "type": "file",
+      "size": 7842,
+      "hash": "9879bae9499c656d23e0b9f1d9f9c6c4c7bec362a8d5523190e25cffd42320f7"
+    },
+    "discloseMyShare.bzkir": {
+      "type": "file",
+      "size": 1924,
+      "hash": "ddc88ac638cce6021836d72b12f1ca4ba6f0e70cbf1652595754025e60d3c4c5"
+    },
+    "discloseMyShare.zkir": {
+      "type": "file",
+      "size": 6669,
+      "hash": "56288ffc47fcf0bb849f96b13766c09b38c128ed0f3a8affadd31dbaa648158f"
+    },
+    "openTab.bzkir": {
+      "type": "file",
+      "size": 1017,
+      "hash": "3dbaec2a925526551373a89e71aeb60dfb3d9e7d3ab201b04b1f4bea14a6d595"
+    },
+    "openTab.zkir": {
+      "type": "file",
+      "size": 3124,
+      "hash": "c1eca11b9ccac114c9a550b3287a4f6ddca1b2a9eedf959c50953c1abf1b3ba3"
+    },
+    "sealAndProve.bzkir": {
+      "type": "file",
+      "size": 2608,
+      "hash": "323337bfc018b898eb7cfbe9f9b82c4fb1da38943f16b536bc6c56fba14cd490"
+    },
+    "sealAndProve.zkir": {
+      "type": "file",
+      "size": 10728,
+      "hash": "e1ed5d82c84cccfa39a0c01243e3c27d1560f3ac38c7314a23f8b0eec15be114"
+    }
+  },
+  "keys": {
+    "type": "directory",
+    "commitShare.prover": {
+      "type": "file",
+      "size": 11278862,
+      "hash": "52bc999738bbf79ebf358b1a08ca27f48a53a7cb54e3e5b6f515e6cfce0985e9"
+    },
+    "commitShare.verifier": {
+      "type": "file",
+      "size": 2121,
+      "hash": "9f910e3d5426ddfab3ed41bd29048c39115bffc0936a36201706977ec305eb84"
+    },
+    "discloseMyShare.prover": {
+      "type": "file",
+      "size": 11278484,
+      "hash": "2762f747fdc54cbf60e4fb96ff375d62b009cb40db98317ed0c96b532558d522"
+    },
+    "discloseMyShare.verifier": {
+      "type": "file",
+      "size": 2121,
+      "hash": "874fbfe02d3a897d8db7249d8c72434ea392767361aa6b570a6f5e3c53e6e3d2"
+    },
+    "openTab.prover": {
+      "type": "file",
+      "size": 446153,
+      "hash": "de04d08f0f2f429010efcd1c53ff1543c633a41fe0224bc7e6f2a38c755c66d7"
+    },
+    "openTab.verifier": {
+      "type": "file",
+      "size": 1353,
+      "hash": "4dc729f0648381a39502aa9c92921e0b0799a0b9c064039af8bf9611c160cff2"
+    },
+    "sealAndProve.prover": {
+      "type": "file",
+      "size": 22551360,
+      "hash": "c86698b0af2cf858ac6fa3cf75523cda00f7351b5789ccd200e7b87fc7794246"
+    },
+    "sealAndProve.verifier": {
+      "type": "file",
+      "size": 2121,
+      "hash": "b611214eb8ffa2d5f7c4a85f0b5bbceaa51de73eb7153d2d33d3e3dda5b7fb52"
+    }
+  }
+}
