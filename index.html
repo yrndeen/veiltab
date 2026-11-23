@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VeilTab Demo</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; background: #0b0d10; color: #e8edf2; }
+    main { max-width: 960px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-size: 1.7rem; margin: 0 0 8px; letter-spacing: -0.02em; }
+    p, li { color: #b4bec8; line-height: 1.55; }
+    video { width: 100%; background: #000; border-radius: 12px; margin: 20px 0; }
+    a { color: #8bd0ff; }
+    ul { padding-left: 1.2rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>VeilTab</h1>
+    <p>Midnight Network Buildathon — Wave 3 (AKINDO). A privacy-first group-tab settlement dApp built with Compact 0.36.1.</p>
+    <ul>
+      <li>A host opens a group tab with a public total and a bounded participant count (1–4).</li>
+      <li>Each participant commits a salted hash of their private share to the public ledger.</li>
+      <li>The <code>sealAndProve</code> circuit proves in zero knowledge that private shares match their commitments and sum exactly to the public total, moving the tab to <strong>Balanced</strong> without revealing individual shares on-chain.</li>
+      <li>Any participant may later call <code>discloseMyShare</code> to selectively reveal only their own share.</li>
+    </ul>
+    <video controls playsinline preload="metadata" src="veiltab-demo-final.mp4"></video>
+    <p><a href="veiltab-demo-final.mp4">Direct MP4 link</a></p>
+  </main>
+</body>
+</html>
