@@ -1,0 +1,49 @@
+name: Publish demo to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: publish-pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pages-src (base64 chunks)
+        uses: actions/checkout@v4
+        with:
+          ref: pages-src
+          path: src
+
+      - name: Checkout current gh-pages (for index.html)
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: pages
+
+      - name: Rebuild orphan gh-pages with decoded demo video
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p site
+          cp pages/index.html site/index.html
+          printf '\n' > site/.nojekyll
+          cat src/pages-chunks/veiltab-demo-final.mp4.b64.* | base64 -d > site/veiltab-demo-final.mp4
+          echo "afe59631680ddb4f4bdd28f90f4b8131302ff79cf5a972538ccf94d157d1754f  site/veiltab-demo-final.mp4" | sha256sum -c
+          ls -lh site
+          cd site
+          git init
+          git checkout --orphan gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Publish VeilTab demo video on an orphan gh-pages branch"
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
+          git push -f origin gh-pages
