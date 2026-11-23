@@ -1,0 +1,16 @@
+{
+  "name": "veiltab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "VeilTab — Private Group-Tab Settlement on Midnight Network (Wave 3 Buildathon)",
+  "scripts": {
+    "compile": "compact compile contracts/veiltab.compact contracts/managed/veiltab",
+    "test": "node --test tests/veiltab.test.mjs",
+    "dev": "node src/server.mjs"
+  },
+  "dependencies": {
+    "@midnight-ntwrk/compact-runtime": "0.21.0"
+  }
+}

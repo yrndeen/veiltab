@@ -1,0 +1,20 @@
+# Local QA, task notes, and demo captures (kept local, not pushed)
+qa/
+tasks/
+
+# Dependencies & build outputs
+node_modules/
+dist/
+dist-app/
+out/
+cache/
+broadcast/
+.vite/
+
+# Environment, secrets & logs
+.env
+.env.*
+*.pem
+*.key
+*.log
+.DS_Store
