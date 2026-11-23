@@ -1,0 +1,126 @@
+pragma language_version 0.28;
+
+import CompactStandardLibrary;
+
+// VeilTab: Private Group-Tab Settlement on Midnight
+// Public ledger holds ONLY the tab total, participant cap, salted commitments,
+// lifecycle state, and any share a participant explicitly chooses to disclose.
+// Individual shares and salts remain private witness inputs during sealAndProve.
+
+export enum TabState {
+  Unopened,
+  Open,
+  Balanced
+}
+
+export ledger tabTotal: Uint<64>;
+export ledger capacity: Uint<8>;
+export ledger commitmentCount: Uint<8>;
+export ledger state: TabState;
+
+// Bounded to MAX_PARTICIPANTS = 4 for crisp ZK circuit size & deterministic proofs
+export ledger commit0: Bytes<32>;
+export ledger commit1: Bytes<32>;
+export ledger commit2: Bytes<32>;
+export ledger commit3: Bytes<32>;
+
+// Optional selective disclosure slot (0 = undisclosed, >0 = participant voluntarily revealed)
+export ledger disclosedSlot: Uint<8>;
+export ledger disclosedAmount: Uint<64>;
+export ledger hasDisclosure: Boolean;
+
+// Private witnesses supplied by local private state / prover
+witness localShare0(): Uint<64>;
+witness localSalt0(): Bytes<32>;
+witness localShare1(): Uint<64>;
+witness localSalt1(): Bytes<32>;
+witness localShare2(): Uint<64>;
+witness localSalt2(): Bytes<32>;
+witness localShare3(): Uint<64>;
+witness localSalt3(): Bytes<32>;
+
+pure circuit hashShare(amount: Uint<64>, salt: Bytes<32>): Bytes<32> {
+  return persistentHash<Vector<2, Bytes<32>>>([amount as Field as Bytes<32>, salt]);
+}
+
+export circuit openTab(total: Uint<64>, participantCount: Uint<8>): [] {
+  assert(state == TabState.Unopened, "Tab already opened");
+  assert(total > 0, "Total must be positive");
+  assert(participantCount >= 1 && participantCount <= 4, "Capacity must be 1..4");
+  tabTotal = disclose(total);
+  capacity = disclose(participantCount);
+  commitmentCount = 0;
+  state = TabState.Open;
+  hasDisclosure = false;
+  disclosedSlot = 0;
+  disclosedAmount = 0;
+}
+
+export circuit commitShare(slot: Uint<8>, shareAmount: Uint<64>, shareSalt: Bytes<32>): [] {
+  assert(state == TabState.Open, "Tab not open");
+  assert(slot < capacity, "Slot out of bounds");
+  assert(shareAmount > 0, "Share must be positive");
+
+  const digest = disclose(hashShare(shareAmount, shareSalt));
+  const s = disclose(slot);
+
+  if (s == 0) {
+    assert(commit0 == pad(32, ""), "Slot 0 already committed");
+    commit0 = digest;
+  } else if (s == 1) {
+    assert(commit1 == pad(32, ""), "Slot 1 already committed");
+    commit1 = digest;
+  } else if (s == 2) {
+    assert(commit2 == pad(32, ""), "Slot 2 already committed");
+    commit2 = digest;
+  } else {
+    assert(commit3 == pad(32, ""), "Slot 3 already committed");
+    commit3 = digest;
+  }
+
+  commitmentCount = (commitmentCount + 1) as Uint<8>;
+}
+
+export circuit sealAndProve(): [] {
+  assert(state == TabState.Open, "Tab not open");
+  assert(commitmentCount == capacity, "Not all participants committed");
+
+  const s0 = localShare0();
+  const k0 = localSalt0();
+  const s1 = localShare1();
+  const k1 = localSalt1();
+  const s2 = localShare2();
+  const k2 = localSalt2();
+  const s3 = localShare3();
+  const k3 = localSalt3();
+
+  assert(hashShare(s0, k0) == commit0, "Share 0 commitment mismatch");
+
+  const sum1 = capacity >= 2 ? (assert(hashShare(s1, k1) == commit1, "Share 1 mismatch"), s1) : 0 as Uint<64>;
+  const sum2 = capacity >= 3 ? (assert(hashShare(s2, k2) == commit2, "Share 2 mismatch"), s2) : 0 as Uint<64>;
+  const sum3 = capacity >= 4 ? (assert(hashShare(s3, k3) == commit3, "Share 3 mismatch"), s3) : 0 as Uint<64>;
+
+  const totalSum = (s0 as Uint<128>) + (sum1 as Uint<128>) + (sum2 as Uint<128>) + (sum3 as Uint<128>);
+  assert(totalSum == (tabTotal as Uint<128>), "Private shares do not sum to public tabTotal");
+
+  state = TabState.Balanced;
+}
+
+export circuit discloseMyShare(slot: Uint<8>, shareAmount: Uint<64>, shareSalt: Bytes<32>): [] {
+  assert(state == TabState.Balanced, "Tab must be balanced first");
+  const s = disclose(slot);
+  assert(s < capacity, "Slot out of bounds");
+  const digest = hashShare(shareAmount, shareSalt);
+  if (s == 0) {
+    assert(digest == commit0, "Share 0 proof mismatch");
+  } else if (s == 1) {
+    assert(digest == commit1, "Share 1 proof mismatch");
+  } else if (s == 2) {
+    assert(digest == commit2, "Share 2 proof mismatch");
+  } else {
+    assert(digest == commit3, "Share 3 proof mismatch");
+  }
+  disclosedSlot = s;
+  disclosedAmount = disclose(shareAmount);
+  hasDisclosure = true;
+}
