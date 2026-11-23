@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VeilTab — Private Group-Tab Settlement on Midnight</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%231b1438%22/><text x=%2216%22 y=%2222%22 text-anchor=%22middle%22 fill=%22%23a78bfa%22 font-size=%2216%22 font-family=%22sans-serif%22>V</text></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <div>
+        <span class="badge">MIDNIGHT COMPACT 0.36.1 · DUAL-LEDGER</span>
+        <span class="badge badge-sec">APACHE-2.0 · LOCAL RUNTIME</span>
+        <h1>VeilTab</h1>
+        <p class="sub">Prove private group-tab shares sum exactly to a public total without disclosing individual amounts.</p>
+      </div>
+      <button id="resetBtn" class="btn-sec" type="button">Reset Tab</button>
+    </header>
+
+    <div id="banner" class="banner" role="status" aria-live="polite">Loading compiled Compact contract state…</div>
+
+    <section class="grid">
+      <article class="card">
+        <h2>1. Open Group Tab</h2>
+        <form id="openForm" class="stack">
+          <label>Public Tab Total (USD cents, e.g. 10000 = $100.00)
+            <input id="totalInput" type="number" min="1" value="10000" required />
+          </label>
+          <label>Participants (1–4)
+            <input id="capInput" type="number" min="1" max="4" value="3" required />
+          </label>
+          <button id="openBtn" class="btn-pri" type="submit">openTab()</button>
+        </form>
+      </article>
+
+      <article class="card">
+        <h2>2. Commit Private Share</h2>
+        <form id="commitForm" class="stack">
+          <label>Participant Slot (0..3)
+            <input id="slotInput" type="number" min="0" max="3" value="0" required />
+          </label>
+          <label>Private Share (cents — stays off public ledger)
+            <input id="shareInput" type="number" min="1" value="3500" required />
+          </label>
+          <label>Private Salt Seed
+            <input id="saltInput" type="text" value="alice-salt" required />
+          </label>
+          <button id="commitBtn" class="btn-pri" type="submit">commitShare()</button>
+        </form>
+      </article>
+
+      <article class="card">
+        <h2>3. Seal &amp; Selective Disclosure</h2>
+        <div class="stack">
+          <p class="muted">Proves private witness shares hash to public commitments and sum exactly to <code>tabTotal</code>.</p>
+          <button id="sealBtn" class="btn-pri" type="button">sealAndProve()</button>
+          <hr />
+          <label>Optional: Disclose Only My Slot (0..3)
+            <input id="discloseSlotInput" type="number" min="0" max="3" value="1" />
+          </label>
+          <button id="discloseBtn" class="btn-sec" type="button">discloseMyShare()</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="card">
+        <h2>Public Ledger State (Visible On-Chain)</h2>
+        <pre id="publicView" class="codebox">Loading…</pre>
+      </article>
+      <article class="card">
+        <h2>Local Private State (Witnesses — Never On-Chain)</h2>
+        <pre id="privateView" class="codebox">Loading…</pre>
+      </article>
+    </section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
